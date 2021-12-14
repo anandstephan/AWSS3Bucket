@@ -262,7 +262,7 @@ router.get("/showalluser", async (req, res) => {
         user.email != "admin@gmail.com" &&
         info.push({ id: user._id, name: user.name, email: user.email })
     );
-    console.log(info);
+    // console.log(info);
     res.render("showalluser", { users: info });
     // res.render('dashboard',{
     //     name:req.user.firstName+" "+req.user.lastName,
@@ -274,10 +274,10 @@ router.get("/showalluser", async (req, res) => {
   }
 });
 
-router.get("/showallfiles", checkAuthenicated, async (req, res) => {
+router.get("/showallfiles", async (req, res) => {
   try {
     const info = await Info.find({ userid: req.session.passport.user }).lean();
-    console.log(info);
+    // console.log(info);
     let result = [];
     info[0].dataUrl.map((data) => {
       // console.log(data);
@@ -288,19 +288,26 @@ router.get("/showallfiles", checkAuthenicated, async (req, res) => {
     //     name:req.user.firstName+" "+req.user.lastName,
     //     stories
     // })
-    res.render("showAllFiles", { users: result });
+    res.render("showAllFiles", { layout: "layout", users: result });
   } catch (err) {
     console.error(err);
   }
 });
 
-router.get("/user/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const info = await Info.find({ userid: req.params.id }).lean();
     let result = [];
     info[0].dataUrl.map((data) => {
       console.log(data);
-      result.push({ url: data, name: data.split("/").pop() });
+      let parts = data.substring(0, data.lastIndexOf("/"));
+      result.push({
+        url: data,
+        name: data.split("/").pop(),
+        extname: data.split(".").pop(),
+        bucketname: data.split(".")[0].split("//")[1],
+        foldername: parts.split("/")[3],
+      });
     });
 
     res.render("showAllFiles", { users: result });

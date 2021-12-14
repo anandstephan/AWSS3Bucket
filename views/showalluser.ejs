@@ -9,22 +9,17 @@
 											<table id="table">
 											<thead>
 											  <tr>
-												<th>File Name</th>
-												<th>Download Link</th>
-                        <th>File Type</th>
-                        <th>Uploaded by</th>
-                        <th>Bucket Name</th>
+												<th>User Name</th>
+                        <th>User Email</th>
+												<th>More Details</th>
 											  </tr>
 											</thead>
 											<tbody>
                         <% users.forEach(user => { %>
                           <tr class="table-active">
                           <td scope="row"><%=user.name%></td>          
-
-                            <td scope="row"><a href=<%= user.url %> class="btn bn-primary" target="_blank">Download</th>
-                              <td>File Type</td>
-                              <td>test</td>
-                              <td>anandbro</td>
+                          <td scope="row"><%=user.email%></td>
+                              <td scope="row"><a href="/<%= user.id %>" class="btn bn-primary" target="_blank">More Details</th>
                             </tr>
                           <% });%>
 
