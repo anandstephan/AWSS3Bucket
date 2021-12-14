@@ -14,7 +14,7 @@ function sendMail(to, msg) {
     service: "gmail",
     auth: {
       user: "anand9412868527@gmail.com",
-      pass: "9412868527",
+      pass: "anand8979669612@",
     },
   });
 
@@ -81,9 +81,9 @@ router.get("/", (req, res) => {
   res.render("login", { layout: "loginlayout" });
 });
 //Login Page
-router.get("/login", (req, res) => {
-  res.render("login", { layout: "loginlayout" });
-});
+// router.get("/login", (req, res) => {
+//   res.render("login", { layout: "loginlayout" });
+// });
 
 //Register Page
 router.get("/register", (req, res) => {
@@ -294,6 +294,10 @@ router.get("/showallfiles", async (req, res) => {
   }
 });
 
+router.get("/edit", (req, res) => {
+  res.render("forgotpassword");
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const info = await Info.find({ userid: req.params.id }).lean();
@@ -316,4 +320,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/forgotpassword", async (req, res) => {
+  const { email, password } = req.body;
+  sendMail(email, password);
+
+  try {
+    let user = await User.findOneAndUpdate({ email: email }, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.redirect("/showalluser");
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router;

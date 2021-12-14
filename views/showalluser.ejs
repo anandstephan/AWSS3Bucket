@@ -9,9 +9,10 @@
 											<table id="table">
 											<thead>
 											  <tr>
-												<th>User Name</th>
-                        <th>User Email</th>
+												<th>Name</th>
+                        						<th>Email</th>
 												<th>More Details</th>
+												<th>Edit</th>
 											  </tr>
 											</thead>
 											<tbody>
@@ -19,7 +20,8 @@
                           <tr class="table-active">
                           <td scope="row"><%=user.name%></td>          
                           <td scope="row"><%=user.email%></td>
-                              <td scope="row"><a href="/<%= user.id %>" class="btn bn-primary" target="_blank">More Details</th>
+                          <td scope="row"><a href="/<%= user.id %>" class="btn btn-primary" target="_blank">More Details</td>
+						  <td><a href="/edit" class="btn btn-primary">Edit</a></td>
                             </tr>
                           <% });%>
 
