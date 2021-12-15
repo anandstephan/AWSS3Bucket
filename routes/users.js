@@ -336,6 +336,7 @@ router.get("/history", async (req, res) => {
           extname: allfile.split(".").pop(),
           bucketname: allfile.split(".")[0].split("//")[1],
           foldername: allfile.split("/")[3],
+          url: allfile,
         })
       )
     );
