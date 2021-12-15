@@ -143,7 +143,7 @@ router.post("/uploaddata", uploads3.array("img", 10), (req, res) => {
 
 //Register Handler
 router.post("/register", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, userType } = req.body;
   let errors = [];
 
   //Check required fields
@@ -245,11 +245,11 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/admin", (req, res) => {
-  res.render("admindashboard");
+  res.render("admindashboard", { layout: "loginlayout" });
 });
 
 router.get("/adduser", (req, res) => {
-  res.render("register");
+  res.render("register", { layout: "loginlayout" });
 });
 
 router.get("/showalluser", async (req, res) => {
@@ -281,14 +281,24 @@ router.get("/showallfiles", async (req, res) => {
     let result = [];
     info[0].dataUrl.map((data) => {
       // console.log(data);
-      result.push({ url: data, name: data.split("/").pop() });
+      result.push({
+        url: data,
+        name: data.split("/").pop(),
+        extname: data.split(".").pop(),
+        bucketname: data.split(".")[0].split("//")[1],
+        foldername: data.split("/")[3],
+      });
     });
-    // console.log(result);
+    // console.log(req.session.passport.user.name);
     // res.render('dashboard',{
     //     name:req.user.firstName+" "+req.user.lastName,
     //     stories
     // })
-    res.render("showAllFiles", { layout: "layout", users: result });
+    res.render("showAllFiles", {
+      layout: "layout",
+      users: result,
+      name: req.session.passport.user.name,
+    });
   } catch (err) {
     console.error(err);
   }

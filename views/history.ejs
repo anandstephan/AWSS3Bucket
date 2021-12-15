@@ -2,7 +2,7 @@
 					<div class="inner_content_w3_agile_info two_in">
 						<h2 class="w3_inner_tittle">History</h2>
 									  <!-- tables -->
-									  
+									  <input class="form-control" id="myInput" type="text" placeholder="Search..">									  
 									  <div class="agile-tables">
 										  <div class="w3l-table-info agile_info_shadow">
 											  <table id="table">
@@ -18,7 +18,7 @@
                                                   <th>Time</th>
 												</tr>
 											  </thead>
-											  <tbody>
+											  <tbody id="myTable">
 						  <% users.forEach(user => { %>
 							<tr class="table-active">
 							<td scope="row"><%=user.name%></td> 
@@ -45,4 +45,16 @@
 					  <!-- //inner_content_w3_agile_info-->
 				  </div>
 		  <!-- //inner_content-->
+		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		  <script>
+			$(document).ready(function(){
+			  $("#myInput").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("#myTable tr").filter(function() {
+				  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			  });
+			});
+			</script>
+			
   
