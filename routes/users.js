@@ -297,6 +297,54 @@ router.get("/showallfiles", async (req, res) => {
 router.get("/edit", (req, res) => {
   res.render("forgotpassword");
 });
+router.get("/history", async (req, res) => {
+  try {
+    const info = await Info.find().lean();
+    // console.log(info);
+    let result = [];
+    info.map((data) => {
+      // console.log(data);
+      result.push({ uid: data.userid, fname: data.dataUrl.map((url) => url) });
+    });
+    // console.log(result);
+    let alldetails = await Promise.all(
+      result.map((newres) => User.findById(newres.uid))
+    );
+    // console.log(alldetails);
+    let mergeDetails = [];
+    for (let i = 0; i < alldetails.length; i++) {
+      result.find((res) => {
+        if (res.uid.equals(alldetails[i]._id)) {
+          const newObj = {
+            name: alldetails[i].name,
+            email: alldetails[i].email,
+            allfiles: res.fname,
+          };
+          mergeDetails.push(newObj);
+          return newObj;
+        }
+      });
+    }
+    // console.log(mergeDetails);
+    let newresult = [];
+    mergeDetails.map((md) =>
+      md.allfiles.map((allfile) =>
+        newresult.push({
+          fname: allfile.split("/").pop(),
+          name: md.name,
+          email: md.email,
+          extname: allfile.split(".").pop(),
+          bucketname: allfile.split(".")[0].split("//")[1],
+          foldername: allfile.split("/")[3],
+        })
+      )
+    );
+    console.log(newresult);
+    res.render("history", { layout: "layout", users: newresult });
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
@@ -334,4 +382,5 @@ router.post("/forgotpassword", async (req, res) => {
     console.log(error);
   }
 });
+
 module.exports = router;
